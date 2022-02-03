@@ -21,5 +21,5 @@ for line in input_stream:
   for word in words: 
     if word not in stop_words:
         letra = word[0:1]
-        if letra in list(string.ascii_lowercase)
+        if letra in list(string.ascii_lowercase):
           print('%s\t%s' % (letra, 1))
