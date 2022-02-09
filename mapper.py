@@ -7,7 +7,8 @@ nltk.download('stopwords',quiet=True)
 from nltk.corpus import stopwords
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
-stop_words = set(stopwords.words('english'))
+stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french') 
+stop_words = set(stop_words)
 input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='latin1')
 for line in input_stream:
   line = line.strip()
@@ -21,5 +22,5 @@ for line in input_stream:
   for word in words: 
     if word not in stop_words:
         letra = word[0:1]
-        if letra in list(string.ascii_lowercase):
+        if letra in list('abcdefghijklmnñopqrstuvwxyzç'):
           print('%s\t%s' % (letra, 1))
