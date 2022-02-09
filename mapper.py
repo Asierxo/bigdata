@@ -4,13 +4,14 @@ import sys
 import io
 import re
 import nltk
-import string
 nltk.download('stopwords', quiet=True)
 from nltk.corpus import stopwords
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
-stop_words = stopwords.words('spanish') + stopwords.words('french')
+# Juntar totes les stopwords de tots els idiomes utilizats: català, castellà i anglès
+stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french')
 stop_words = set(stop_words)
+# Llegim cada línia dels arxius i els netejam
 input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='latin1')
 for line in input_stream:
   line = line.strip()
@@ -21,9 +22,9 @@ for line in input_stream:
       line=line.replace(x, " ") 
 
   words=line.split()
+# Llevam accents amb un codi d'internet que te lleva els accents menys la Ñ
   for word in words: 
     if word not in stop_words:
-        
         word = re.sub(
                 r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
                 normalize( "NFD", word), 0, re.I
