@@ -11,8 +11,8 @@ punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 # Juntar totes les stopwords de tots els idiomes utilizats: català, castellà i anglès
 stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french')
 stop_words = set(stop_words)
-# Llegim cada línia dels arxius i els netejam
-input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='latin1')
+# Llegim cada línia dels arxius i els netejam, utilizam l'encoding 
+input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
 for line in input_stream:
   line = line.strip()
   line = re.sub(r'[^\w\s]', '',line)
