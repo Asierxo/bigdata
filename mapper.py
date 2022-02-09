@@ -1,4 +1,5 @@
 import re
+from unicodedata import normalize
 import sys
 import io
 import re
