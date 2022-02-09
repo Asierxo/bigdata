@@ -7,7 +7,7 @@ nltk.download('stopwords',quiet=True)
 from nltk.corpus import stopwords
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
-stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french')  + stopwords.words('catalan') 
+stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french')
 stop_words = set(stop_words)
 input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='latin1')
 for line in input_stream:
