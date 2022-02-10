@@ -36,5 +36,5 @@ for line in input_stream:
         word = normalize( 'NFC', word)
         
       letra = word[0:1]
-      if letra in list('abcdefghijklmnñopqrstuvwxyzç'):
+      if letra in list('abcçdefghijklmnñopqrstuvwxyz'):
         print('%s\t%s' % (letra, 1))
