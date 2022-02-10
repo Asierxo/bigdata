@@ -37,4 +37,4 @@ for line in input_stream:
         
       letra = word[0:1]
       if letra in list('abcçdefghijklmnñopqrstuvwxyz'):
-        print('%s\t%s' % (letra, 1))
+        print('%s\t%s\t%s' % (letra, 1, len(word)))
