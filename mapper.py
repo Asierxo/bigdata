@@ -36,5 +36,6 @@ for line in input_stream:
         word = normalize( 'NFC', word)
         
       letra = word[0:1]
+# Li enviam la lletra, el contador d'aquesta i la dimensió de la paraula
       if letra in list('abcçdefghijklmnñopqrstuvwxyz'):
         print('%s\t%s\t%s' % (letra, 1, len(word)))
