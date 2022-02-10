@@ -25,6 +25,7 @@ for line in input_stream:
 # Llevam accents amb un codi d'internet que te lleva els accents menys la Ñ
   for word in words: 
     if word not in stop_words:
+      if word[0:1]!='ç':
         word = re.sub(
                 r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
                 normalize( "NFD", word), 0, re.I
