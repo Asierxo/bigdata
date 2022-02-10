@@ -25,6 +25,8 @@ for line in sys.stdin:
     # this IF-switch only works because Hadoop sorts map output
     # by key (here: word) before it is passed to the reducer
     if current_word == word:
+        if max_word_len>max_len:
+                max_len=max_word_len
         current_count += count
     else:
         if current_word:
