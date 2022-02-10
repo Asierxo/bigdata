@@ -1,7 +1,7 @@
 from operator import itemgetter
 import sys
 
-current_word = None
+current_word_lletra = None
 current_count = 0
 max_len= 0
 word = None
@@ -24,22 +24,22 @@ for line in sys.stdin:
 
     # this IF-switch only works because Hadoop sorts map output
     # by key (here: word) before it is passed to the reducer
-    if current_word == word:
+    if current_word_lletra == word:
         if max_word_len>max_len:
                 max_len=max_word_len
         current_count += count
     else:
-        if current_word:
+        if current_word_lletra:
             if max_word_len>max_len:
                 max_len=max_word_len
             # write result to STDOUT
-            print ('%s\t%s\t%s' % (current_word, current_count, max_len))
+            print ('%s\t%s\t%s' % (current_word_lletra, current_count, max_len))
         current_count = count
         max_len=max_word_len
-        current_word = word
+        current_word_lletra = word
 
 # do not forget to output the last word if needed!
-if current_word == word:
+if current_word_lletra == word:
     if max_word_len>max_len:
         max_len=max_word_len
-    print( '%s\t%s\t%s' % (current_word, current_count, max_len))
+    print( '%s\t%s\t%s' % (current_word_lletra, current_count, max_len))
