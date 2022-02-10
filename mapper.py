@@ -1,3 +1,5 @@
+# Es el teu arxiu modificat amb l'ajuda d'un post d'stackoverflow de https://es.stackoverflow.com/questions/135707/c%C3%B3mo-puedo-reemplazar-las-letras-con-tildes-por-las-mismas-sin-tilde-pero-no-l
+
 import re
 from unicodedata import normalize
 import sys
