@@ -13,7 +13,7 @@ for line in sys.stdin:
     line=line.lower()
 
     # parse the input we got from mapper.py
-    word, count, max_word_len = line.split('\t', 2)
+    word, count, max_word_len = line.split('\t')
     try:
       count = int(count)
       max_word_len= int(max_word_len)
@@ -38,4 +38,6 @@ for line in sys.stdin:
 
 # do not forget to output the last word if needed!
 if current_word == word:
+    if max_word_len>max_len:
+        max_len=max_word_len
     print( '%s\t%s\t%s' % (current_word, current_count, max_len))
