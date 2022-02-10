@@ -8,7 +8,7 @@ nltk.download('stopwords', quiet=True)
 from nltk.corpus import stopwords
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
-# Juntar totes les stopwords de tots els idiomes utilizats: català, castellà i anglès
+# Juntar totes les stopwords de tots els idiomes utilizats: català, castellà, anglès i francès
 stop_words = stopwords.words('english') + stopwords.words('spanish') + stopwords.words('french')
 stop_words = set(stop_words)
 # Llegim cada línia dels arxius i els netejam, utilizam l'encoding 
