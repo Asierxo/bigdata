@@ -22,7 +22,7 @@ for line in input_stream:
       line=line.replace(x, " ") 
 
   words=line.split()
-# Llevam accents amb un codi d'internet que te lleva els accents menys la Ñ
+# Llevam accents amb un codi d'internet que te lleva els accents menys la Ñ, abans l'he posat un if perquè tampoc llevi la ç
   for word in words: 
     if word not in stop_words:
       if word[0:1]!='ç':
