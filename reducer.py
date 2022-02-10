@@ -35,7 +35,7 @@ for line in sys.stdin:
             # write result to STDOUT
             print ('%s\t%s\t%s' % (current_word, current_count, max_len))
         current_count = count
-        max_len=0
+        max_len=max_word_len
         current_word = word
 
 # do not forget to output the last word if needed!
