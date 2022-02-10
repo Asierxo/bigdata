@@ -30,9 +30,9 @@ for line in input_stream:
                 r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
                 normalize( "NFD", word), 0, re.I
             )
-
         # -> NFC
         word = normalize( 'NFC', word)
-        letra = word[0:1]
-        if letra in list('abcdefghijklmnñopqrstuvwxyzç'):
-          print('%s\t%s' % (letra, 1))
+        
+      letra = word[0:1]
+      if letra in list('abcdefghijklmnñopqrstuvwxyzç'):
+        print('%s\t%s' % (letra, 1))
