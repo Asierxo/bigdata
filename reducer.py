@@ -1,10 +1,10 @@
 from operator import itemgetter
 import sys
 
-current_word_lletra = None
+current_lletra = None
 current_count = 0
 max_len= 0
-word = None
+lletra = None
 
 # input comes from STDIN
 for line in sys.stdin:
@@ -13,33 +13,33 @@ for line in sys.stdin:
     line=line.lower()
 
     # parse the input we got from mapper.py
-    word, count, max_word_len = line.split('\t')
+    lletra, count, max_lletra_len = line.split('\t')
     try:
       count = int(count)
-      max_word_len= int(max_word_len)
+      max_lletra_len= int(max_lletra_len)
     except ValueError:
       #count was not a number, so silently
       #ignore/discard this line
       continue
 
     # this IF-switch only works because Hadoop sorts map output
-    # by key (here: word) before it is passed to the reducer
-    if current_word_lletra == word:
-        if max_word_len>max_len:
-                max_len=max_word_len
+    # by key (here: lletra) before it is passed to the reducer
+    if current_lletra == lletra:
+        if max_lletra_len>max_len:
+                max_len=max_lletra_len
         current_count += count
     else:
-        if current_word_lletra:
-            if max_word_len>max_len:
-                max_len=max_word_len
+        if current_lletra:
+            if max_lletra_len>max_len:
+                max_len=max_lletra_len
             # write result to STDOUT
-            print ('%s\t%s\t%s' % (current_word_lletra, current_count, max_len))
+            print ('%s\t%s\t%s' % (current_lletra, current_count, max_len))
         current_count = count
-        max_len=max_word_len
-        current_word_lletra = word
+        max_len=max_lletra_len
+        current_lletra = lletra
 
-# do not forget to output the last word if needed!
-if current_word_lletra == word:
-    if max_word_len>max_len:
-        max_len=max_word_len
-    print( '%s\t%s\t%s' % (current_word_lletra, current_count, max_len))
+# do not forget to output the last lletra if needed!
+if current_lletra == lletra:
+    if max_lletra_len>max_len:
+        max_len=max_lletra_len
+    print( '%s\t%s\t%s' % (current_lletra, current_count, max_len))
