@@ -1,3 +1,4 @@
+# És el teu reducer modificat perquè retorni a més la paraula més llarga amb aquesta lletra
 from operator import itemgetter
 import sys
 
@@ -24,6 +25,7 @@ for line in sys.stdin:
 
     # this IF-switch only works because Hadoop sorts map output
     # by key (here: lletra) before it is passed to the reducer
+    # Comprovam que la dimensió de la lletra és més gran que l'anterior per poder substituir la variable.
     if current_lletra == lletra:
         if max_lletra_len>max_len:
                 max_len=max_lletra_len
