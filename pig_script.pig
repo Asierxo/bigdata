@@ -1,7 +1,7 @@
 REGISTER /usr/lib/pig/piggybank.jar;
 extract_details = LOAD '/user/cloudera/pig_analisis_opinions/critiquescinematografiques.csv' 
  USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  
- AS (text:chararray, label:int, id:int);
+ AS (text:chararray, label:boolean, id:int);
 tokens = foreach extract_details generate id,label,text, FLATTEN(TOKENIZE(text)) As word;
 dictionary = load '/user/cloudera/pig_analisis_opinions/AFINN.txt' 
  using PigStorage('\t') AS(word:chararray,rating:int);
