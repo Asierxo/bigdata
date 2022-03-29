@@ -13,8 +13,8 @@ avg_rate = foreach word_group generate group, AVG(rating.rate) as AVG;
 /* dump comp4; */
 comp5 = foreach avg_rate generate group, (((AVG>=0) AND (group.label==1)) OR ((AVG<0) AND (group.label==0))? 1 : 0) as c:int, AVG;
 /* dump comp5; */
-STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions' 
- USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+/*STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions' 
+ USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');*/
 
 comp5_group = GROUP comp5 ALL;
 
