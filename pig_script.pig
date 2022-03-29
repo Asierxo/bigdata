@@ -33,5 +33,5 @@ rating_count= foreach word_group
       negatives = FILTER rating BY rate < 0;
       GENERATE COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
   }
-rating_join = join word_group by (id,text,label) left outer, rating_count by (id,text,label) using 'replicated';
-STORE rating_join INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+rating_total = foreach avg_rate generate group, rating_count.n_positives as n_positives:int,rating_count.n_negatives as n_negatives:int , AVG;
+STORE rating_total INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
