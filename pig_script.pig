@@ -7,14 +7,14 @@ describe word_rating;
 rating = foreach word_rating generate tokens::id as id,tokens::text as text, tokens::label as label, dictionary::rating as rate;
 word_group = group rating by (id,text,label);
 avg_rate = foreach word_group generate group, AVG(rating.rate) as AVG;
-/*comp3 = foreach avg_rate generate group, ((AVG>0)? 1 : 0) as avg_positiu:int, AVG;*/
+comp3 = foreach avg_rate generate group, ((AVG>0)? 1 : 0) as avg_positiu:int, AVG;
 /* dump comp3; */
-/*comp4 = foreach avg_rate generate group, ((group.label==0)? 1 : 0) as no_label:int, AVG;*/
+comp4 = foreach avg_rate generate group, ((group.label==0)? 1 : 0) as no_label:int, AVG;
 /* dump comp4; */
 comp5 = foreach avg_rate generate group, (((AVG>=0) AND (group.label==1)) OR ((AVG<0) AND (group.label==0))? 1 : 0) as c:int, AVG;
 /* dump comp5; */
-/*STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions' 
- USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');*/
+/* STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions' 
+ USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); */
 
 comp5_group = GROUP comp5 ALL;
 
@@ -22,6 +22,16 @@ records_each = FOREACH comp5_group
                    {
                       trues = FILTER comp5 BY c == 1;
                       falses = FILTER comp5 BY c == 0;
+
                     GENERATE group, COUNT(trues) as trues, COUNT(falses) as falses;
                    };
-STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+/* STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); */
+
+rating_count= foreach word_group
+  {
+      positives = FILTER rating BY rate >= 0;
+      negatives = FILTER rating BY rate < 0;
+      GENERATE COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
+  }
+rating_join = join word_group by (id,text,label) left outer, rating_count by (id,text,label) using 'replicated';
+STORE rating_join INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
