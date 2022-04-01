@@ -18,7 +18,7 @@ records_each = FOREACH comp5_group
                       trues = FILTER comp5 BY c == 1;
                       falses = FILTER comp5 BY c == 0;
 
-                    GENERATE group, COUNT(trues) as trues, COUNT(falses) as falses;
+                    GENERATE COUNT(trues) as trues, COUNT(falses) as falses;
                    };
 STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
 
@@ -26,7 +26,7 @@ rating_count= foreach word_group
   {
       positives = FILTER rating BY rate >= 0;
       negatives = FILTER rating BY rate < 0;
-      GENERATE COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
+      GENERATE group, COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
   }
 rating_join = join comp5 by group left outer, rating_count by group using 'replicated';
 rating_final = foreach rating_join generate comp5::group.id as id, comp5::group.text as text, comp5::group.label as label, comp5::c as c, rating_count::n_positives as n_positives, rating_count::n_negatives as n_negatives;
