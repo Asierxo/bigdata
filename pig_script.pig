@@ -33,8 +33,8 @@ rating_count= foreach word_group
    GENERATE group, COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
   }
 rating_nogroup = foreach rating_count generate group.id, group.text, group.label, n_positives, n_negatives;
-comp5_nogroup = foreach comp5 generate group.id, group.text, group.label, n_positives, n_negatives;
+comp5_nogroup = foreach comp5 generate group.id, group.text, group.label, c;
 
 rating_join = join comp5_nogroup by (id, text, label) left outer, rating_nogroup by (id, text, label) using 'replicated';
-rating_final = foreach rating_join generate comp5_nogroup::id as id, comp5_nogroup::text as text, comp5_nogroup::label as label, comp5::c as c, comp5_nogroup::n_positives as n_positives, comp5_nogroup::n_negatives as n_negatives;
+rating_final = foreach rating_join generate comp5_nogroup::id as id, comp5_nogroup::text as text, comp5_nogroup::label as label, comp5::c as c, rating_nogroup::n_positives as n_positives, rating_nogroup::n_negatives as n_negatives;
 STORE rating_final INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
