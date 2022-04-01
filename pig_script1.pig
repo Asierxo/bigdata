@@ -7,14 +7,9 @@ describe word_rating;
 rating = foreach word_rating generate tokens::id as id,tokens::text as text, tokens::label as label, dictionary::rating as rate;
 word_group = group rating by (id,text,label);
 avg_rate = foreach word_group generate group, AVG(rating.rate) as AVG;
-comp3 = foreach avg_rate generate group, ((AVG>0)? 1 : 0) as avg_positiu:int, AVG;
-/* dump comp3; */
-comp4 = foreach avg_rate generate group, ((group.label==0)? 1 : 0) as no_label:int, AVG;
-/* dump comp4; */
 comp5 = foreach avg_rate generate group, (((AVG>=0) AND (group.label==1)) OR ((AVG<0) AND (group.label==0))? 1 : 0) as c:int, AVG;
-/* dump comp5; */
-/* STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions' 
- USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); */
+STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions' 
+ USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); 
 
 comp5_group = GROUP comp5 ALL;
 
@@ -25,7 +20,7 @@ records_each = FOREACH comp5_group
 
                     GENERATE group, COUNT(trues) as trues, COUNT(falses) as falses;
                    };
-/* STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); */
+STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
 
 rating_count= foreach word_group
   {
@@ -35,4 +30,4 @@ rating_count= foreach word_group
   }
 rating_join = join comp5 by group left outer, rating_count by group using 'replicated';
 rating_final = foreach rating_join generate comp5::group.id as id, comp5::group.text as text, comp5::group.label as label, comp5::c as c, rating_count::n_positives as n_positives, rating_count::n_negatives as n_negatives;
-STORE rating_final INTO '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+STORE rating_final INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
