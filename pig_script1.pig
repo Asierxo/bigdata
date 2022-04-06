@@ -2,7 +2,7 @@ REGISTER /usr/lib/pig/piggybank.jar;
 comentaris = LOAD '/user/cloudera/pig_analisis_opinions/critiquescinematografiques.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  AS (text:chararray, label:int, id:int);
 pelis = LOAD '/user/cloudera/pig_analisis_opinions/pelis.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(';', 'YES_MULTILINE')  AS (id:int, nom_pelicula:chararray);
 
-/* Agrupam els comentaris per id per després filtrar si les labels són postives, negatives i fer la diferència.
+/* Agrupam els comentaris per id per després filtrar si les labels són postives, negatives i fer la diferència. */
 
 comentaris_group = group comentaris by id;
 contador_opinions = foreach comentaris_group
