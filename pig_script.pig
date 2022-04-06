@@ -16,24 +16,24 @@ STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_
 
 comp5_group = GROUP comp5 ALL;
 
-records_each = FOREACH comp5_group 
+contador_comp5 = FOREACH comp5_group 
                    {
                       trues = FILTER comp5 BY c == 1;
                       falses = FILTER comp5 BY c == 0;
 
                     GENERATE COUNT(trues) as trues, COUNT(falses) as falses;
                    };
-STORE records_each INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+STORE contador_comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
 
-rating_count= foreach word_group
+contador_rating= foreach word_group
   {
       positives = FILTER rating BY rate >= 0;
       negatives = FILTER rating BY rate < 0;
    GENERATE group, COUNT(positives) as n_positives, COUNT(negatives) as n_negatives;
   }
-rating_nogroup = foreach rating_count generate group.id, group.text, group.label, n_positives, n_negatives;
-comp5_nogroup = foreach comp5 generate group.id, group.text, group.label, c;
+rating_no_filtrat = foreach contador_rating generate group.id, group.text, group.label, n_positives, n_negatives;
+comp5_no_filtrat = foreach comp5 generate group.id, group.text, group.label, c;
 
-rating_join = join comp5_nogroup by (id, text, label) left outer, rating_nogroup by (id, text, label) using 'replicated';
-rating_final = foreach rating_join generate comp5_nogroup::id as id, comp5_nogroup::text as text, comp5_nogroup::label as label, comp5_nogroup::c as c, rating_nogroup::n_positives as n_positives, rating_nogroup::n_negatives as n_negatives;
+rating_join = join comp5_no_filtrat by (id, text, label) left outer, rating_no_filtrat by (id, text, label) using 'replicated';
+rating_final = foreach rating_join generate comp5_no_filtrat::id as id, comp5_no_filtrat::text as text, comp5_no_filtrat::label as label, comp5_no_filtrat::c as c, rating_no_filtrat::n_positives as n_positives, rating_no_filtrat::n_negatives as n_negatives;
 STORE rating_final INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_words' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
