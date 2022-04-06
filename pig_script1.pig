@@ -1,5 +1,4 @@
 REGISTER /usr/lib/pig/piggybank.jar;
-/* comentaris = LOAD '/user/cloudera/WorkspacePigAnalisisOpinionsExercici/resultat_analisis_opinions/part-r-00000' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  AS (id:int, text:chararray, label:int, c:int, AVG:float); */
 comentaris = LOAD '/user/cloudera/pig_analisis_opinions/critiquescinematografiques.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  AS (text:chararray, label:int, id:int);
 pelis = LOAD '/user/cloudera/pelicules.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  AS (id:int, nom_pelicula:chararray);
 comentaris_group = group comentaris by id;
