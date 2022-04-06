@@ -1,7 +1,3 @@
-/*-- set the debug mode on 
-SET debug 'on'
--- set a job name of your job.
-SET job.name 'my job'*/
 REGISTER /usr/lib/pig/piggybank.jar;
 extract_details = LOAD '/user/cloudera/pig_analisis_opinions/critiquescinematografiques.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE')  AS (text:chararray, label:int, id:int);
 tokens = foreach extract_details generate id,label,text, FLATTEN(TOKENIZE(text)) As word;
@@ -13,6 +9,8 @@ avg_rate = foreach word_group generate group, AVG(rating.rate) as AVG;
 comp5 = foreach avg_rate generate group, (((AVG>=0) AND (group.label==1)) OR ((AVG<0) AND (group.label==0))? 1 : 0) as c:int, AVG;
 STORE comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions' 
  USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE'); 
+ 
+ /* Agrupam les labels calculades adalt i filtram si són positives o negatives per després contar-les*/
 
 comp5_group = GROUP comp5 ALL;
 
@@ -24,6 +22,8 @@ contador_comp5 = FOREACH comp5_group
                     GENERATE COUNT(trues) as trues, COUNT(falses) as falses;
                    };
 STORE contador_comp5 INTO '/user/cloudera/WorkspacePigAnalisisOpinions/resultat_analisis_opinions_count' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE');
+
+/* Filtram els word_groups per obtenir si un rate d'una paraula és positiva o negativa per després contar-la, després projectam per veure camps que no estiguin repetits.*/
 
 contador_rating= foreach word_group
   {
