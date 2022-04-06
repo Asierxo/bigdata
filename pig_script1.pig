@@ -3,8 +3,7 @@ comentaris = LOAD '/user/cloudera/pig_analisis_opinions/critiquescinematografiqu
 pelis = LOAD '/user/cloudera/pig_analisis_opinions/pelis.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(';', 'YES_MULTILINE')  AS (id:int, nom_pelicula:chararray);
 comentaris_group = group comentaris by id;
 
-/* Per cada id contam les labels positives i les negatives */
-countOpinions = foreach comentaris_group
+contador_opinions = foreach comentaris_group
   {
       l_positives = FILTER comentaris BY label == 1;
       l_negatives = FILTER comentaris BY label == 0;
@@ -12,9 +11,8 @@ countOpinions = foreach comentaris_group
       GENERATE group as id, COUNT(comentaris.id) as n_comentaris, COUNT(l_positives) as l_positives, COUNT(l_negatives) as l_negatives, l_total as l_total;
   }
 
-/* Feim un join de les pelicules amb el seu n_opinions, les labels positives i les labels negatives */
-pelis_join1 = join pelis by id, countOpinions by id using 'replicated';
-pelis_opinions = foreach pelis_join1 generate pelis::id as id, pelis::nom_pelicula as nom_pelicula, countOpinions::n_comentaris as n_opinions, countOpinions::l_positives as l_positives, countOpinions::l_negatives as l_negatives, countOpinions::l_total as l_total;
+pelis_join = join pelis by id, contador_opinions by id using 'replicated';
+pelis_opinions = foreach pelis_join generate pelis::id as id, pelis::nom_pelicula as nom_pelicula, contador_opinions::n_comentaris as n_opinions, contador_opinions::l_positives as l_positives, contador_opinions::l_negatives as l_negatives, contador_opinions::l_total as l_total;
 
 tokens = foreach comentaris generate id,label,text, FLATTEN(TOKENIZE(text)) As word;
 dictionary = load '/user/cloudera/pig_analisis_opinions/AFINN.txt' using PigStorage('\t') AS(word:chararray,rating:int);
